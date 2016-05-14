@@ -1,0 +1,17 @@
+logging:
+    level: 
+        org.springframework.web: INFO
+oilprice:
+    contentPath: CONFIGURE_ME
+    mailchimp:
+        apiKey: CONFIGURE_ME
+        campaign:
+            list_id: CONFIGURE_ME
+            subject: Test Newsletter Subject
+            from_email: CONFIGURE_ME
+            from_name: Oil Price
+            title: Test Newsletter Subject
+            template_id: CONFIGURE_ME
+            authenticate: true
+            
+            

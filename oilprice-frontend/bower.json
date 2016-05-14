@@ -1,0 +1,15 @@
+{
+  "name": "oil-price-frontend",
+  "description": "Oil Price application frontend",
+  "version": "0.0.1",
+  "license": "Apache v2.0",
+  "private": true,
+  "dependencies": {
+    "angular": "^1.4.9",
+    "angular-ui-router": "^0.2.18",
+    "angular-resource": "^1.4.9",
+    "angular-bootstrap": "^1.3.2",
+    "bootstrap3-ie10-viewport-bug-workaround": "^1.0.0",
+    "bootstrap": "3.3.6"
+  }
+}

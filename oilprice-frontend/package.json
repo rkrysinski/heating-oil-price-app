@@ -1,0 +1,10 @@
+{
+  "name": "oil-price-frontend",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Oil Price application frontend",
+  "license": "Apache v2.0",
+  "devDependencies": {
+    "bower": "^1.7.2"
+  }
+}

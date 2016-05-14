@@ -1,0 +1,29 @@
+<div class="home">
+	<div class="row">
+	  <div class="col-md-2">Currency:</div>
+	  <div class="col-md-2">{{current.currency}}</div>
+	</div>
+	
+	<div class="row">
+	  <div class="col-md-2">Current:</div>
+	  <div class="col-md-2">{{current.value}}</div>
+	</div>
+	
+	<div class="top-margin">
+	</div>
+	
+	<div class="row">
+	  <div class="col-md-8">Top {{top.length}} previous prices:</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-5">
+			<table class="table table-condensed">
+					<tr ng-repeat="item in top">
+						<td>{{item.date}}</td>
+						<td>{{item.value}}</td>
+					<tr>
+			</table>
+		  </div>
+	</div>
+</div>
