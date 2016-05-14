@@ -5,4 +5,5 @@ target
 **/node_modules
 **/node
 TODO.txt
+oilprice-backend/src/main/resources/application.yml
 
