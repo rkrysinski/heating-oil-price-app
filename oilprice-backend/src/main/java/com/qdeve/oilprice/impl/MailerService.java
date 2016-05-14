@@ -37,6 +37,11 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateNotFoundException;
 
+/**
+ * Triggers email notifications to subscribers on daily basis, excluding weekends.
+ *
+ * @author Roman Krysinski
+ */
 @Component
 public class MailerService
 {

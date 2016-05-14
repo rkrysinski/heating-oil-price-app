@@ -27,8 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.qdeve.oilprice.db.OilPrice;
 import com.qdeve.oilprice.db.OilPriceDAO;
-import com.qdeve.oilprice.impl.ImportService;
-import com.qdeve.oilprice.impl.MailerService;
 
 /**
  * REST API that exposes Oil Prices related information to front-end.
@@ -43,12 +41,6 @@ public class OilPriceController
 
 	@Autowired
 	private OilPriceDAO dao;
-
-	@Autowired
-	private ImportService importService;
-
-	@Autowired
-	private MailerService mailer;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	ResponseEntity<List<OilPrice>> getAllItems()
@@ -69,19 +61,5 @@ public class OilPriceController
 	{
 		List<OilPrice> items = dao.findTop();
 		return ResponseEntity.ok(items);
-	}
-
-	@RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
-	ResponseEntity<String> sendNotif()
-	{
-		mailer.sendNotificationToSubscribers();
-		return ResponseEntity.ok("");
-	}
-
-	@RequestMapping(value = "/import", method = RequestMethod.GET, produces = "application/json")
-	ResponseEntity<String> importData()
-	{
-		importService.doImport();
-		return ResponseEntity.ok("");
 	}
 }

@@ -28,7 +28,7 @@ import com.qdeve.oilprice.db.OilPrice;
 import com.qdeve.oilprice.db.OilPriceDAO;
 
 /**
- * Calculates actual prices of oil exposed to subscribers.
+ * Calculates actual price(s) that are exposed to subscribers.
  *
  * @author Roman Krysinski
  */
