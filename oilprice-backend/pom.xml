@@ -10,6 +10,7 @@
 	</parent>
 
 	<artifactId>oilprice-backend</artifactId>
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>
@@ -88,6 +89,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${appname}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -109,7 +111,7 @@
 						<descriptor>src/main/assembly/assembly.xml</descriptor>
 					</descriptors>
 				</configuration>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 
