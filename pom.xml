@@ -52,7 +52,7 @@
 							<org>rkrysinski</org>
 							<space>development</space>
 							<appname>heating-oil-price</appname>
-							<url>oilprice.cfapps.io</url>
+							<url>oilprice.qdeve.com</url>
 							<memory>512</memory>
 							<instances>1</instances>
 							<path>oilprice-backend/target/${appname}.jar</path>
