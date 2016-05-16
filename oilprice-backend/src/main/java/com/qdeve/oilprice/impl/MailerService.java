@@ -55,9 +55,9 @@ public class MailerService
 	private PriceCalcComponent calcComponent;
 
 	/**
-	 * Send notification at 8:00 AM MON-FRI.
+	 * Send notification at 9:00 AM MON-FRI.
 	 */
-	@Scheduled(cron = "0 9 * * * MON-FRI")
+	@Scheduled(cron = "0 0 9 * * MON-FRI")
 	public void sendNotificationToSubscribers()
 	{
 		try
