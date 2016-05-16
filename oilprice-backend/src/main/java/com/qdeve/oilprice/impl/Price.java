@@ -18,7 +18,9 @@ package com.qdeve.oilprice.impl;
 
 import java.time.LocalDate;
 
+import javax.money.Monetary;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryRounding;
 
 /**
  * Holds calculated price and date.
@@ -59,6 +61,7 @@ public class Price
 	{
 		private LocalDate date;
 		private MonetaryAmount value;
+		private boolean isRounding;
 
 		public Builder withDate(LocalDate date)
 		{
@@ -76,8 +79,19 @@ public class Price
 		{
 			Price price = new Price();
 			price.setDate(date);
+			if (isRounding)
+			{
+				MonetaryRounding rounding = Monetary.getRounding(value.getCurrency());
+				value = value.with(rounding);
+			}
 			price.setValue(value);
 			return price;
+		}
+
+		public Builder withRounding()
+		{
+			isRounding = true;
+			return this;
 		}
 	}
 

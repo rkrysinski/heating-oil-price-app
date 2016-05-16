@@ -34,6 +34,11 @@ public final class MonetaryUtils
 		return amount == null ? null : amount.getNumber().numberValueExact(BigDecimal.class);
 	}
 
+	public static Double getDoubleFrom(MonetaryAmount amount)
+	{
+		return amount == null ? null : amount.getNumber().numberValueExact(Double.class);
+	}
+
 	public static String getCurrencyFrom(MonetaryAmount amount)
 	{
 		return amount == null ? null : amount.getCurrency().getCurrencyCode();

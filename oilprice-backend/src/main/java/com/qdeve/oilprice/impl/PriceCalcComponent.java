@@ -59,6 +59,7 @@ public class PriceCalcComponent
 		MonetaryAmount pricePerLiterWithMargin = sum.divide(1000).multiply(MARGIN_FACTOR);
 		return Price.builder()
 				.withPrice(pricePerLiterWithMargin)
+				.withRounding()
 				.withDate(oilPrice.getDate())
 				.build();
 	}
