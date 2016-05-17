@@ -34,13 +34,14 @@
               <nav>
                 <ul class="nav masthead-nav" id="top-menu">
                   <li ui-sref-active="active" class="active"><a ui-sref="home">Home</a></li>
+                  <li ui-sref-active="active"><a ui-sref="chart">Chart</a></li>
                   <li ui-sref-active="active"><a ui-sref="about">About</a></li>
                 </ul>
               </nav>
             </div>
           </div>
 
-          <div class="inner cover">
+          <div class="cover">
            	<ui-view></ui-view>
           </div>
 
@@ -72,11 +73,13 @@
     <script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="libs/angular-resource/angular-resource.js"></script>
     <script src="libs/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="libs/angular-google-chart/ng-google-chart.js"></script>
     
     <script src="app.js"></script>
     <script src="views/modules.js"></script>
     <script src="views/about/about.js"></script>
     <script src="views/home/home.js"></script>
+    <script src="views/chart/chart.js"></script>
     <script src="common/modules.js"></script>
     <script src="common/oilprice/oilprices-api.js"></script>
     <script src="common/oilprice/converter.js"></script>

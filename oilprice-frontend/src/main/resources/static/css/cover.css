@@ -142,7 +142,7 @@ body {
 
 @media ( min-width : 992px) {
 	.masthead, .mastfoot, .cover-container {
-		width: 700px;
+		width: 800px;
 	}
 }
 
@@ -164,4 +164,11 @@ body {
 
 .top-margin {
 	margin-top: 20px;
+}
+
+.chart {
+	text-align: left;
+	color: #000;
+	height:500px; 
+	width:800px;
 }

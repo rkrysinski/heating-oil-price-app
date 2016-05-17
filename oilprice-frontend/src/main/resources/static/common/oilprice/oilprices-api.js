@@ -17,9 +17,19 @@ angular
 		    }).getTop(callback);
 		};
 		
+		var getAll = function(callback) {
+			return $resource('/oilprices', {}, {
+		        all: {
+		            method: 'GET',
+		            isArray: true
+		        }
+		    }).all(callback);
+		};
+		
 		return {
 			current: current,
-			top: top
+			top: top,
+			all: getAll
 		}
 	});
 		

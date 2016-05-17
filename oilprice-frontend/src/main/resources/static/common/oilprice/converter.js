@@ -31,8 +31,16 @@ angular
 			return converted;
 		};
 	
+		var convertToGoogleAnnotationRecord = function(oilPrice) {
+			var converted = [];
+			converted.push({v: getDateObjFor(oilPrice)});
+			converted.push({v: getValueFor(oilPrice)});
+			return {c: converted};
+		};
+		
 		return {
-			convert: convert
+			convert: convert,
+			convertToGoogleAnnotationRecord: convertToGoogleAnnotationRecord
 		}
 	});
 		

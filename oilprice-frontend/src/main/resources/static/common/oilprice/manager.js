@@ -22,10 +22,23 @@ angular
 				callback(converted);
 			});
 		};
+		
+		var all = function(callback) {
+			oilPricesSrv.all(function (responseData) {
+				var converted = [];
+				angular.forEach(responseData, function(value, key) {
+					converted.push(
+							oilPriceConverterSrv.convertToGoogleAnnotationRecord(value)
+					);
+				});
+				callback(converted);
+			});
+		};
 	
 		return {
 			currentPrice: current,
-			top: top
+			top: top,
+			all: all
 		}
 	});
 		

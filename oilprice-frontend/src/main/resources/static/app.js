@@ -3,6 +3,7 @@
 angular
     .module('OilApp', [
         'ui.router',
+        'googlechart',
         'ngResource',
         'ui.bootstrap',
         'OilApp.views',
