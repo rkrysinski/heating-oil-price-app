@@ -9,22 +9,25 @@ angular
             controller: 'ChartCtrl'
         });
     })
-    .controller('ChartCtrl', function ($scope, oilPriceMgr) {
-    	
-    	oilPriceMgr.all(function(chartRows) {
-        	$scope.myChartObject = {};
-            $scope.myChartObject.type = "AnnotationChart";
-            $scope.myChartObject.data = {
-            		"cols": [
-            		         {id: "month", label: "Month", type: "date"},
-            		         {id: "oilprice-data", label: "Oil price", type: "number"}
-            		 ], 
-            		 "rows": chartRows
-            };
-            
-
-            $scope.myChartObject.options = {
-                displayAnnotations: false
-            };
-    	});
+    .controller('ChartCtrl', function ($rootScope, oilPriceMgr) {
+    	if ($rootScope.myChartObject === undefined) {
+    		
+    		oilPriceMgr.all(function(chartRows) {
+    			
+    			$rootScope.myChartObject = $rootScope.myChartObject || {
+    				type: "AnnotationChart",
+    				data: {
+    					"cols": [
+    					         {id: "month", label: "Month", type: "date"},
+    					         {id: "oilprice-data", label: "Oil price", type: "number"}
+    					         ], 
+    					         "rows": chartRows
+    				},
+    				options: {
+    					displayAnnotations: false
+    				}
+    			};
+    			
+    		});
+    	}
     });
