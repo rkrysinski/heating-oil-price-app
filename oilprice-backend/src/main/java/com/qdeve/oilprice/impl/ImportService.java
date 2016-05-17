@@ -47,7 +47,7 @@ public class ImportService
 	/**
 	 * Perform import at 2:00 AM each day.
 	 */
-	@Scheduled(cron = "0 0 2 * * *")
+	@Scheduled(cron = "0 0 2 * * *", zone = "Europe/Warsaw")
 	public void doImport()
 	{
 		LOG.info("Fetching information from external system.");
