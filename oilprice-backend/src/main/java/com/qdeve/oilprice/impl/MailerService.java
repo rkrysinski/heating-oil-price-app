@@ -57,7 +57,7 @@ public class MailerService
 	/**
 	 * Send notification at 9:00 AM MON-FRI.
 	 */
-	@Scheduled(cron = "0 0 10 * * MON-FRI", zone = "Europe/Warsaw")
+	@Scheduled(cron = "0 0 9 * * MON-FRI", zone = "Europe/Warsaw")
 	public void sendNotificationToSubscribers()
 	{
 		try

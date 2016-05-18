@@ -45,9 +45,9 @@ public class ImportService
 	private OilPriceDAO dao;
 
 	/**
-	 * Perform import at 2:00 AM each day.
+	 * Perform import at 6:00 AM each day.
 	 */
-	@Scheduled(cron = "0 0 2 * * *", zone = "Europe/Warsaw")
+	@Scheduled(cron = "0 0 6 * * *", zone = "Europe/Warsaw")
 	public void doImport()
 	{
 		LOG.info("Fetching information from external system.");
