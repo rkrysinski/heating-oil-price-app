@@ -16,7 +16,7 @@ angular
 		}
 		
 		function getDateObjFor(oilPrice) {
-			return new Date(oilPrice.date.year, oilPrice.date.month, oilPrice.date.day);
+			return new Date(oilPrice.date.year, oilPrice.date.month - 1, oilPrice.date.day);
 		}
 		
 		function getCurrentyOf(oilPrice) {
