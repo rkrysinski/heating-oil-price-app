@@ -19,14 +19,15 @@ package com.qdeve.oilprice.db;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -68,7 +69,7 @@ public class OilPriceDAOIntegrationTest
 				.withFuelSurcharge(3)
 				.withFuelSurchargeCurrency("ZMW")
 				.build()
-				);
+		);
 
 		// when
 		List<OilPrice> oilPrices = daoUnderTest.getAll();
@@ -85,11 +86,11 @@ public class OilPriceDAOIntegrationTest
 	}
 
 	@Test
-	public void shouldOverwriteEntitiesInDb()
+	public void shouldNotRemoveEntitiesFromDb()
 	{
 		// given
-		LocalDate nowDate = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()).toLocalDate();
-		Instant today = nowDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+		LocalDate nowDate = LocalDate.now();
+		Instant today = nowDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
 		entityDAO.save(OilPriceEntity.builder()
 				.withId(123)
 				.withDate(Date.from(today))
@@ -100,31 +101,115 @@ public class OilPriceDAOIntegrationTest
 				.withFuelSurcharge(3)
 				.withFuelSurchargeCurrency("ZMW")
 				.build()
-				);
+		);
 
 		// when
 		Instant tomorrow = today.plus(1, ChronoUnit.DAYS);
 		LocalDate tomorrowDate = LocalDateTime.ofInstant(tomorrow, ZoneId.systemDefault()).toLocalDate();
-		daoUnderTest.overwriteWith(Arrays.asList(OilPrice.builder()
+		daoUnderTest.save(Arrays.asList(OilPrice.builder()
 				.withDate(tomorrowDate)
 				.withPrice(MonetaryUtils.newMoneyFrom(10, "ZAR"))
 				.withExcise(MonetaryUtils.newMoneyFrom(20, "EUR"))
 				.withFuelSurcharge(MonetaryUtils.newMoneyFrom(30, "ALL"))
-				.build()
-				));
+				.build())
+		);
 
 		// then
 		List<OilPriceEntity> dbEntities = entityDAO.findAll();
-		assertThat(dbEntities.size(), equalTo(1));
-		OilPriceEntity dbEntity = dbEntities.get(0);
-		assertThat(dbEntity.getPrice().longValueExact(), equalTo(10L));
-		assertThat(dbEntity.getPriceCurrency(), equalTo("ZAR"));
-		assertThat(dbEntity.getExcise().longValueExact(), equalTo(20L));
-		assertThat(dbEntity.getExciseCurrency(), equalTo("EUR"));
-		assertThat(dbEntity.getFuelSurcharge().longValueExact(), equalTo(30L));
-		assertThat(dbEntity.getFuelSurchargeCurrency(), equalTo("ALL"));
-		LocalDate tomorrowDateEntity = LocalDateTime.ofInstant(dbEntity.getDate().toInstant(), ZoneId.systemDefault()).toLocalDate();
-		assertThat(tomorrowDateEntity, equalTo(tomorrowDate));
+		assertThat(dbEntities.size(), equalTo(2));
+
+		Optional<OilPriceEntity> tomorrowDbEntity = dbEntities.stream()
+				.filter(entity -> entity.isDateEqualTo(tomorrow)).findAny();
+		assertThat(tomorrowDbEntity.isPresent(), equalTo(true));
+		tomorrowDbEntity.ifPresent(dbEntity -> {
+			OilPriceEntityAssertion.assertThat(dbEntity)
+				.withPriceValue(10L)
+				.withPriceCurrency("ZAR")
+				.withExciseValue(20L)
+				.withExciseCurrency("EUR")
+				.withFuelSurchargeValue(30L)
+				.withFuelSurchargeCurrency("ALL");
+		});
+
+		Optional<OilPriceEntity> todayDbEntity = dbEntities.stream()
+				.filter(entity -> entity.isDateEqualTo(today)).findAny();
+		assertThat(todayDbEntity.isPresent(), equalTo(true));
+		todayDbEntity.ifPresent(dbEntity -> {
+			OilPriceEntityAssertion.assertThat(dbEntity)
+				.withPriceValue(1L)
+				.withPriceCurrency("USD")
+				.withExciseValue(2L)
+				.withExciseCurrency("PLN")
+				.withFuelSurchargeValue(3L)
+				.withFuelSurchargeCurrency("ZMW");
+		});
+	}
+
+	@Test
+	public void shouldNotDuplicateEntriesInDbForTheSameDate()
+	{
+		// given
+		LocalDate nowDate = LocalDate.now();
+		Instant today = nowDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+		entityDAO.save(OilPriceEntity.builder()
+				.withDate(Date.from(today))
+				.withPrice(1)
+				.withPriceCurrency("USD")
+				.withExcise(2)
+				.withExciseCurrency("PLN")
+				.withFuelSurcharge(3)
+				.withFuelSurchargeCurrency("ZMW")
+				.build()
+		);
+
+		// when
+		Instant tomorrow = today.plus(1, ChronoUnit.DAYS);
+		LocalDate tomorrowDate = LocalDateTime.ofInstant(tomorrow, ZoneId.systemDefault()).toLocalDate();
+		daoUnderTest.save(Arrays.asList(
+				OilPrice.builder()
+					.withDate(nowDate)
+					.withPrice(MonetaryUtils.newMoneyFrom(1, "USD"))
+					.withExcise(MonetaryUtils.newMoneyFrom(2, "PLN"))
+					.withFuelSurcharge(MonetaryUtils.newMoneyFrom(3, "ZMW"))
+					.build(),
+				OilPrice.builder()
+					.withDate(tomorrowDate)
+					.withPrice(MonetaryUtils.newMoneyFrom(10, "ZAR"))
+					.withExcise(MonetaryUtils.newMoneyFrom(20, "EUR"))
+					.withFuelSurcharge(MonetaryUtils.newMoneyFrom(30, "ALL"))
+					.build()
+				)
+		);
+
+		// then
+		List<OilPriceEntity> dbEntities = entityDAO.findAll();
+		assertThat(dbEntities.size(), equalTo(2));
+
+		Optional<OilPriceEntity> todayDbEntity = dbEntities.stream()
+				.filter(entity -> entity.isDateEqualTo(today)).findAny();
+		assertThat(todayDbEntity.isPresent(), equalTo(true));
+		todayDbEntity.ifPresent(dbEntity -> {
+			OilPriceEntityAssertion.assertThat(dbEntity)
+				.withPriceValue(1L)
+				.withPriceCurrency("USD")
+				.withExciseValue(2L)
+				.withExciseCurrency("PLN")
+				.withFuelSurchargeValue(3L)
+				.withFuelSurchargeCurrency("ZMW");
+		});
+
+		Optional<OilPriceEntity> tomorrowDbEntity = dbEntities.stream()
+				.filter(entity -> entity.isDateEqualTo(tomorrow)).findAny();
+		assertThat(tomorrowDbEntity.isPresent(), equalTo(true));
+		tomorrowDbEntity.ifPresent(dbEntity -> {
+			OilPriceEntityAssertion.assertThat(dbEntity)
+				.withPriceValue(10L)
+				.withPriceCurrency("ZAR")
+				.withExciseValue(20L)
+				.withExciseCurrency("EUR")
+				.withFuelSurchargeValue(30L)
+				.withFuelSurchargeCurrency("ALL");
+		});
 	}
 
 }

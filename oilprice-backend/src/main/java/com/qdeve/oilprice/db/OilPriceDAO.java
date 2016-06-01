@@ -16,7 +16,9 @@
  **************************************************************************/
 package com.qdeve.oilprice.db;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +39,20 @@ public class OilPriceDAO
 	private OilPriceEntityDAO entityDAO;
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public void overwriteWith(List<OilPrice> prices)
+	public void save(List<OilPrice> prices)
 	{
 		if (!prices.isEmpty())
 		{
-			entityDAO.deleteAll();
-			entityDAO.save(prices.stream()
+			Set<Date> dbEntitiesDates = entityDAO.findAll().stream()
+					.map(OilPriceEntity::getDate)
+					.collect(Collectors.toSet());
+			List<OilPriceEntity> toSave = prices.stream()
 					.map(price -> price.toEntity())
-					.collect(Collectors.toList())
-			);
+					.filter(priceEntity -> {
+						return !dbEntitiesDates.contains(priceEntity.getDate());
+					})
+					.collect(Collectors.toList());
+			entityDAO.save(toSave);
 		}
 	}
 

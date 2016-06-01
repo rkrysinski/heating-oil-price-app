@@ -52,7 +52,7 @@ public class ImportService
 	{
 		LOG.info("Fetching information from external system.");
 		List<OilPrice> entries = reader.fetch();
-		dao.overwriteWith(entries);
+		dao.save(entries);
 		LOG.info("System loaded with Oil Price information.");
 	}
 }

@@ -17,6 +17,7 @@
 package com.qdeve.oilprice.db;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -363,4 +364,8 @@ class OilPriceEntity
 				+ ", fuelSurchargeCurrency=" + fuelSurchargeCurrency + ", version=" + version + "]";
 	}
 
+	public boolean isDateEqualTo(Instant instant)
+	{
+		return date.compareTo(Date.from(instant)) == 0;
+	}
 }
